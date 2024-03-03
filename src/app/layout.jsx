@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,14 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <nav>
+            <div className="float-end m-4">
+              <ModeToggle />
+            </div>
+          </nav>
+          <main className="flex min-h-screen flex-col items-center Xjustify-between p-24">
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>
