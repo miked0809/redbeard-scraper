@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { invokeScraper } from "./_invokeScraper";
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,17 +15,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
+import ScrapedDataDisplay from "./_scrapedDataDisplay";
 const formSchema = z.object({
   ownername: z.string().min(1, {
     message: "Ownername is required.",
   }),
 });
 
-let isLoaded = false;
-
 export default function ScraperForm() {
-  const router = useRouter();
+  const [scrapedData, setScrapedData] = useState({});
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -36,10 +34,17 @@ export default function ScraperForm() {
 
   function onSubmit(values) {
     startScraper(() => {
-      invokeScraper(values.ownername);
-      isLoaded = true;
+      invokeScraper(values.ownername).then((data) => {
+        console.log("onSubmit data: ", data);
+        setScrapedData(data);
+      });
     });
   }
+
+  const handleReset = () => {
+    setScrapedData({});
+    form.reset();
+  };
 
   const [isPending, startScraper] = useTransition();
 
@@ -51,18 +56,14 @@ export default function ScraperForm() {
     );
   }
 
-  const navigate = () => {
-    isLoaded = false;
-    router.push("/results");
-  };
   return (
     <>
-      {!isPending && !isLoaded && (
+      {!isPending && (
         <>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 text-center"
+              className="space-y-8 text-center mb-4"
             >
               <FormField
                 control={form.control}
@@ -78,13 +79,17 @@ export default function ScraperForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <div className="space-x-2">
+                <Button type="submit">Submit</Button>
+                <Button type="button" variant="ghost" onClick={handleReset}>
+                  Reset
+                </Button>
+              </div>
             </form>
           </Form>
+          <ScrapedDataDisplay scrapedData={scrapedData} />
         </>
       )}
-
-      {!isPending && isLoaded && navigate()}
     </>
   );
 }
