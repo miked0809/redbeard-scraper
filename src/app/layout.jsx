@@ -21,14 +21,16 @@ export default function RootLayout({ children }) {
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          <nav>
-            <div className="float-end m-4">
-              <ModeToggle />
-            </div>
-          </nav>
-          <main className="flex min-h-screen flex-col items-center Xjustify-between p-24">
-            {children}
-          </main>
+          <div className="bg-gradient-to-b from-background dark:via-background to-indigo-100 dark:to-indigo-950">
+            <nav>
+              <div className="float-end m-4">
+                <ModeToggle />
+              </div>
+            </nav>
+            <main className="flex min-h-screen flex-col items-center Xjustify-between p-24">
+              {children}
+            </main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

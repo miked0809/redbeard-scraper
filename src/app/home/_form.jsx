@@ -111,7 +111,7 @@ export default function ScraperForm() {
                             </SelectItem>
                           </SelectContent>
                         </Select>
-                        <FormMessage />
+                        <FormMessage className="dark:text-yellow-300" />
                       </FormItem>
                     )}
                   />

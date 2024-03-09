@@ -8,7 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
+import { Printer, MoveUpRight } from "lucide-react";
+import Link from "next/link";
 
 export default function ScrapedDataDisplay({
   scrapedData,
@@ -27,9 +28,9 @@ export default function ScrapedDataDisplay({
                 </h2>
                 <Button
                   id="printButton"
-                  variant="ghost"
+                  variant="outline"
                   onClick={() => print()}
-                  className="-mt-[6px]"
+                  className="-mt-[6px] p-2"
                   title="Print"
                 >
                   <Printer />
@@ -37,7 +38,18 @@ export default function ScrapedDataDisplay({
               </div>
 
               <Table>
-                <TableCaption>{selectedUrl}</TableCaption>
+                <TableCaption>
+                  <Link
+                    href={selectedUrl}
+                    target="_blank"
+                    className="hover:underline"
+                  >
+                    {selectedUrl}
+                    <span className="inline-flex">
+                      <MoveUpRight className="size-[14px]" />
+                    </span>
+                  </Link>
+                </TableCaption>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
