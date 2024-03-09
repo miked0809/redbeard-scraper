@@ -1,17 +1,19 @@
 const scraperObject = {
-  url: "https://auditor.co.madison.oh.us/Search",
-  async scraper(browser, ownername) {
+  //url: "https://auditor.co.madison.oh.us/Search",
+  async scraper(browser, url, ownername) {
     let page = await browser.newPage();
-    console.log(`Navigating to ${this.url}...`);
+    console.log(`Navigating to ${url}...`);
 
-    await page.goto(this.url);
+    await page.goto(url);
     await performSearch(page, ownername);
 
     let scrapedData = [];
     let index = 1;
     async function scrapeCurrentPage() {
       await page.waitForSelector(".table-responsive");
-      scrapedData.push(await parseResults(page));
+      //scrapedData.push(await parseResults(page));
+      const _scrapedData = await parseResults(page);
+      scrapedData = [...scrapedData, _scrapedData];
       //await takeScreenshot(page, "page" + index);
       index++;
 
@@ -48,16 +50,19 @@ async function parseResults(page) {
   const results = await page.$$eval(
     ".table-responsive table tbody tr",
     (rows) => {
-      return Array.from(rows, (row) => {
+      return rows.map((row) => {
         const columns = row.querySelectorAll(
           "td:nth-child(n+3):nth-child(-n+4)"
         );
-        return Array.from(columns, (column) => column.innerText);
+        return {
+          name: columns[0].innerText,
+          address: columns[1].innerText,
+        };
       });
     }
   );
 
-  console.log(results);
+  // console.log(results);
   return results;
 }
 

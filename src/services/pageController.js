@@ -1,21 +1,23 @@
 const pageScraper = require("./pageScraper");
 const fs = require("fs");
 
-async function scrapeAll(browserInstance, ownername) {
+async function scrapeAll(browserInstance, url, ownername) {
   let browser;
   let scrapedData = {};
 
   try {
     browser = await browserInstance;
 
-    scrapedData = await pageScraper.scraper(browser, ownername);
+    scrapedData = await pageScraper.scraper(browser, url, ownername);
     await browser.close();
     writeToJson(scrapedData);
   } catch (err) {
     console.log("Could not resolve the browser instance => ", err);
   }
 
-  return scrapedData;
+  const flattenedData = scrapedData.flat();
+  console.log("scrapedData:", flattenedData);
+  return flattenedData;
 }
 
 function writeToJson(scrapedData) {
@@ -34,5 +36,5 @@ function writeToJson(scrapedData) {
   );
 }
 
-module.exports = (browserInstance, ownername) =>
-  scrapeAll(browserInstance, ownername);
+module.exports = (browserInstance, url, ownername) =>
+  scrapeAll(browserInstance, url, ownername);
