@@ -7,6 +7,8 @@ import { useTransition, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -60,6 +62,11 @@ export default function ScraperForm() {
     startScraper(() => {
       invokeScraper(CountyUrl[values.url], values.ownername).then((data) => {
         setScrapedData(data);
+        if (Object.keys(data).length === 0) {
+          toast("No results found, search again", {
+            duration: 10000,
+          });
+        }
       });
     });
   }
@@ -123,7 +130,11 @@ export default function ScraperForm() {
                       <FormItem className="text-left">
                         <FormLabel>Owner Name (Last First)</FormLabel>
                         <FormControl>
-                          <Input {...field} className="w-[400px]" />
+                          <Textarea
+                            placeholder="Enter each name on a new line (lastname firstname)"
+                            className="w-[400px] min-h-[24px]"
+                            {...field}
+                          />
                         </FormControl>
 
                         <FormMessage />

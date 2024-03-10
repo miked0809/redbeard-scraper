@@ -1,43 +1,63 @@
 const scraperObject = {
-  //url: "https://auditor.co.madison.oh.us/Search",
-  async scraper(browser, url, ownername) {
+  async scraper(browser, url, ownernamesArray) {
     let page = await browser.newPage();
-    console.log(`Navigating to ${url}...`);
-
-    await page.goto(url);
-    await performSearch(page, ownername);
-
     let scrapedData = [];
-    let index = 1;
-    async function scrapeCurrentPage() {
-      await page.waitForSelector(".table-responsive");
-      //scrapedData.push(await parseResults(page));
-      const _scrapedData = await parseResults(page);
-      scrapedData = [...scrapedData, _scrapedData];
-      //await takeScreenshot(page, "page" + index);
-      index++;
 
-      let nextButtonExists = false;
-      let nextButtonSelector =
-        "button[title='Next Parcel Search Results Page']";
-      try {
-        await page.$eval(nextButtonSelector, (button) => button.textContent);
-        nextButtonExists = true;
-      } catch (err) {
-        nextButtonExists = false;
+    // fight the headless browser issue
+    await page.setExtraHTTPHeaders({
+      "Accept-Language": "en-US,en;q=0.9",
+    });
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
+    );
+
+    async function scrapeOwner(page, url, ownername) {
+      console.log(`Navigating to ${url}...`);
+
+      await page.goto(url);
+      await performSearch(page, ownername);
+
+      let scrapedPageData = [];
+      let index = 1;
+
+      async function scrapeCurrentPage() {
+        if (!ownername || ownername.length === 0) {
+          return scrapedPageData;
+        }
+        await page.waitForSelector(".table-responsive");
+        const _scrapedPageData = await parseResults(page);
+        scrapedPageData = [...scrapedPageData, _scrapedPageData];
+        index++;
+
+        let nextButtonExists = false;
+        let nextButtonSelector =
+          "button[title='Next Parcel Search Results Page']";
+        try {
+          await page.$eval(nextButtonSelector, (button) => button.textContent);
+          nextButtonExists = true;
+        } catch (err) {
+          nextButtonExists = false;
+        }
+
+        if (nextButtonExists) {
+          await page.click(nextButtonSelector);
+          return scrapeCurrentPage();
+        }
+
+        return scrapedPageData;
       }
 
-      if (nextButtonExists) {
-        await page.click(nextButtonSelector);
-        return scrapeCurrentPage();
+      scrapedData.push(await scrapeCurrentPage());
+
+      if (ownernamesArray.length > 0) {
+        return await scrapeOwner(page, url, ownernamesArray.shift());
       }
 
       await page.close();
-      return scrapedData;
+      return scrapedData.flat();
     }
 
-    let results = await scrapeCurrentPage();
-    return results;
+    return await scrapeOwner(page, url, ownernamesArray.shift());
   },
 };
 
@@ -62,16 +82,7 @@ async function parseResults(page) {
     }
   );
 
-  // console.log(results);
   return results;
-}
-
-async function takeScreenshot(page, filename) {
-  return await page.screenshot({
-    path: filename + ".jpg",
-    type: "jpeg",
-    quality: 20,
-  });
 }
 
 module.exports = scraperObject;

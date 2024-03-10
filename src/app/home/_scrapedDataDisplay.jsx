@@ -38,7 +38,7 @@ export default function ScrapedDataDisplay({
               </div>
 
               <Table>
-                <TableCaption>
+                <TableCaption className="whitespace-nowrap">
                   <Link
                     href={selectedUrl}
                     target="_blank"
@@ -67,11 +67,6 @@ export default function ScrapedDataDisplay({
               </Table>
             </div>
           </div>
-          {process.env.DEV_MODE === "true" && (
-            <div className="mx-auto border p-10">
-              <pre>{JSON.stringify(scrapedData, null, 2)}</pre>
-            </div>
-          )}
         </>
       )}
     </>
