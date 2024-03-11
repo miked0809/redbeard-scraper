@@ -3,9 +3,9 @@
 import browserObject from "@/services/browser";
 import scraperController from "@/services/pageController";
 
-export async function invokeScraper(url, ownernames) {
-  console.log("invokeScraper(" + url + ", " + ownernames + ")");
+export async function invokeScraper(county, ownernames) {
+  console.log("invokeScraper(" + county + ", " + ownernames + ")");
 
   let browserInstance = browserObject.startBrowser();
-  return scraperController(browserInstance, url, ownernames);
+  return scraperController(browserInstance, county, ownernames);
 }

@@ -26,6 +26,10 @@ export default function ScrapedDataDisplay({
                 <h2 className="text-xl font-bold mb-8">
                   {selectedCounty} County
                 </h2>
+                <div>
+                  {scrapedData.length +
+                    (scrapedData.length === 1 ? " result" : " results")}
+                </div>
                 <Button
                   id="printButton"
                   variant="outline"

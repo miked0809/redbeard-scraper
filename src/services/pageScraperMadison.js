@@ -1,19 +1,12 @@
-const scraperObject = {
-  async scraper(browser, url, ownernamesArray) {
-    let page = await browser.newPage();
-    let scrapedData = [];
+import { CountyUrl } from "@/services/constants";
 
-    // fight the headless browser issue
-    await page.setExtraHTTPHeaders({
-      "Accept-Language": "en-US,en;q=0.9",
-    });
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
-    );
+const scraperObject = {
+  async scraper(page, county, ownernamesArray) {
+    const url = CountyUrl[county];
+    let scrapedData = [];
 
     async function scrapeOwner(page, url, ownername) {
       console.log(`Navigating to ${url}...`);
-
       await page.goto(url);
       await performSearch(page, ownername);
 

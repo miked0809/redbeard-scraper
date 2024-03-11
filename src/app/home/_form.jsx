@@ -1,7 +1,7 @@
 "use client";
 
+import { CountyUrl } from "@/services/constants";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { invokeScraper } from "./_invokeScraper";
 import { useTransition, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,20 +26,13 @@ import {
 } from "@/components/ui/select";
 import ScrapedDataDisplay from "./_scrapedDataDisplay";
 const formSchema = z.object({
-  url: z.string({
+  county: z.string({
     required_error: "Please select a county website to scrape.",
   }),
   ownername: z.string().min(1, {
     message: "Ownername is required.",
   }),
 });
-
-const CountyUrl = {
-  Madison: "https://auditor.co.madison.oh.us/Search",
-  Delaware: "",
-  Fairfield: "",
-  Union: "",
-};
 
 export default function ScraperForm() {
   const [scrapedData, setScrapedData] = useState({});
@@ -49,18 +42,18 @@ export default function ScraperForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      url: "Madison",
+      county: "Delaware",
       ownername: "",
     },
   });
 
   function onSubmit(values) {
     console.log("onSubmit() values:", values);
-    setSelectedCounty(values.url);
-    setSelectedUrl(CountyUrl[values.url]);
+    setSelectedCounty(values.county);
+    setSelectedUrl(CountyUrl[values.county]);
 
     startScraper(() => {
-      invokeScraper(CountyUrl[values.url], values.ownername).then((data) => {
+      invokeScraper(values.county, values.ownername).then((data) => {
         setScrapedData(data);
         if (Object.keys(data).length === 0) {
           toast("No results found, search again", {
@@ -99,7 +92,7 @@ export default function ScraperForm() {
                 >
                   <FormField
                     control={form.control}
-                    name="url"
+                    name="county"
                     render={({ field }) => (
                       <FormItem className="text-left">
                         <FormLabel>County</FormLabel>
@@ -113,6 +106,9 @@ export default function ScraperForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            <SelectItem value="Delaware">
+                              Delaware County
+                            </SelectItem>
                             <SelectItem value="Madison">
                               Madison County
                             </SelectItem>
