@@ -36,13 +36,13 @@ const formSchema = z.object({
 
 export default function ScraperForm() {
   const [scrapedData, setScrapedData] = useState({});
-  const [selectedCounty, setSelectedCounty] = useState("Madison");
-  const [selectedUrl, setSelectedUrl] = useState(CountyUrl.Madison);
+  const [selectedCounty, setSelectedCounty] = useState("");
+  const [selectedUrl, setSelectedUrl] = useState("");
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      county: "Delaware",
+      county: "",
       ownername: "",
     },
   });
@@ -98,7 +98,7 @@ export default function ScraperForm() {
                         <FormLabel>County</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -109,9 +109,13 @@ export default function ScraperForm() {
                             <SelectItem value="Delaware">
                               Delaware County
                             </SelectItem>
+                            {/* <SelectItem value="Fairfield">
+                              Fairfield County
+                            </SelectItem> */}
                             <SelectItem value="Madison">
                               Madison County
                             </SelectItem>
+                            <SelectItem value="Union">Union County</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage className="dark:text-yellow-300" />

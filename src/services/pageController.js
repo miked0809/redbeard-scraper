@@ -1,5 +1,7 @@
 const pageScraperMadison = require("./pageScraperMadison");
 const pageScraperDelaware = require("./pageScraperDelaware");
+const pageScraperUnion = require("./pageScraperUnion");
+const pageScraperFairfield = require("./pageScraperFairfield");
 
 async function scrapeAll(browserInstance, county, ownernames) {
   let browser;
@@ -20,6 +22,20 @@ async function scrapeAll(browserInstance, county, ownernames) {
     );
 
     switch (county) {
+      case "Delaware":
+        scrapedData = await pageScraperDelaware.scraper(
+          page,
+          county,
+          _ownernames
+        );
+        break;
+      case "Fairfield":
+        scrapedData = await pageScraperFairfield.scraper(
+          page,
+          county,
+          _ownernames
+        );
+        break;
       case "Madison":
         scrapedData = await pageScraperMadison.scraper(
           page,
@@ -27,12 +43,9 @@ async function scrapeAll(browserInstance, county, ownernames) {
           _ownernames
         );
         break;
-      case "Delaware":
-        scrapedData = await pageScraperDelaware.scraper(
-          page,
-          county,
-          _ownernames
-        );
+
+      case "Union":
+        scrapedData = await pageScraperUnion.scraper(page, county, _ownernames);
         break;
       default:
         throw new Error(county + " County is not supported yet");
