@@ -11,44 +11,52 @@ async function scrapeAll(browserInstance, county, ownernames) {
   try {
     browser = await browserInstance;
 
-    let page = await browser.newPage();
+    let page = (await browser.pages())[0]; // Instead of using browser.newPage()
 
     // fight the headless browser issue
     await page.setExtraHTTPHeaders({
       "Accept-Language": "en-US,en;q=0.9",
     });
     await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5643.204 Safari/537.36"
     );
 
-    switch (county) {
-      case "Delaware":
-        scrapedData = await pageScraperDelaware.scraper(
-          page,
-          county,
-          _ownernames
-        );
-        break;
-      case "Fairfield":
-        scrapedData = await pageScraperFairfield.scraper(
-          page,
-          county,
-          _ownernames
-        );
-        break;
-      case "Madison":
-        scrapedData = await pageScraperMadison.scraper(
-          page,
-          county,
-          _ownernames
-        );
-        break;
+    try {
+      switch (county) {
+        case "Delaware":
+          scrapedData = await pageScraperDelaware.scraper(
+            page,
+            county,
+            _ownernames
+          );
+          break;
+        case "Fairfield":
+          scrapedData = await pageScraperFairfield.scraper(
+            page,
+            county,
+            _ownernames
+          );
+          break;
+        case "Madison":
+          scrapedData = await pageScraperMadison.scraper(
+            page,
+            county,
+            _ownernames
+          );
+          break;
 
-      case "Union":
-        scrapedData = await pageScraperUnion.scraper(page, county, _ownernames);
-        break;
-      default:
-        throw new Error(county + " County is not supported yet");
+        case "Union":
+          scrapedData = await pageScraperUnion.scraper(
+            page,
+            county,
+            _ownernames
+          );
+          break;
+        default:
+          throw new Error(county + " County is not supported yet");
+      }
+    } catch (err) {
+      console.log("Problem scraping data => : ", err);
     }
 
     await browser.close();

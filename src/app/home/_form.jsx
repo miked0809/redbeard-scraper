@@ -109,9 +109,9 @@ export default function ScraperForm() {
                             <SelectItem value="Delaware">
                               Delaware County
                             </SelectItem>
-                            {/* <SelectItem value="Fairfield">
+                            <SelectItem value="Fairfield">
                               Fairfield County
-                            </SelectItem> */}
+                            </SelectItem>
                             <SelectItem value="Madison">
                               Madison County
                             </SelectItem>
