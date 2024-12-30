@@ -2,6 +2,7 @@ const pageScraperMadison = require("./pageScraperMadison");
 const pageScraperDelaware = require("./pageScraperDelaware");
 const pageScraperUnion = require("./pageScraperUnion");
 const pageScraperFairfield = require("./pageScraperFairfield");
+const pageScraperFranklin = require("./pageScraperFranklin");
 
 async function scrapeAll(browserInstance, county, ownernames) {
   let browser;
@@ -32,6 +33,13 @@ async function scrapeAll(browserInstance, county, ownernames) {
           break;
         case "Fairfield":
           scrapedData = await pageScraperFairfield.scraper(
+            page,
+            county,
+            _ownernames
+          );
+          break;
+        case "Franklin":
+          scrapedData = await pageScraperFranklin.scraper(
             page,
             county,
             _ownernames

@@ -112,6 +112,9 @@ export default function ScraperForm() {
                             <SelectItem value="Fairfield">
                               Fairfield County
                             </SelectItem>
+                            <SelectItem value="Franklin">
+                              Franklin County
+                            </SelectItem>
                             <SelectItem value="Madison">
                               Madison County
                             </SelectItem>
@@ -153,7 +156,12 @@ export default function ScraperForm() {
           )}
 
           {Object.keys(scrapedData).length > 0 && (
-            <Button type="button" variant="ghost" onClick={handleReset}>
+            <Button
+              type="button"
+              variant="default"
+              onClick={handleReset}
+              className="mb-4"
+            >
               Search Again
             </Button>
           )}

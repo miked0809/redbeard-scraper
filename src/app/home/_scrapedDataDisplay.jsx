@@ -20,7 +20,14 @@ export default function ScrapedDataDisplay({
     <>
       {Object.keys(scrapedData).length > 0 && (
         <>
-          <div className="mt-8 border p-4">
+          {selectedCounty === "Franklin" &&
+            Object.keys(scrapedData).length === 50 && (
+              <div className="text-destructive">
+                *For Franklin County, a max of 50 results are displayed (there
+                could be more)
+              </div>
+            )}
+          <div className="mt-2 border p-4">
             <div id="section-to-print">
               <div className="w-full flex justify-between">
                 <h2 className="text-xl font-bold mb-8">
@@ -63,7 +70,10 @@ export default function ScrapedDataDisplay({
                 <TableBody>
                   {scrapedData.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell className="font-medium">{row.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {row.name}
+                        {row.name2 ? ", " + row.name2 : ""}
+                      </TableCell>
                       <TableCell>{row.address}</TableCell>
                     </TableRow>
                   ))}
