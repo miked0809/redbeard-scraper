@@ -13,7 +13,7 @@
 - from Mac laptop:
   - commit changes via VS Code GitHub plugin (VS Code won't let me push changes due to login issue)
   - using Github Desktop, push changes to repo
-- from Chromebook or Macbook Screen Sharing (Mac-Mini-103.local), connect to Mac Mini
+- from Mac Mini (connect via Chromebook or Mac Screen Sharing at Mac-Mini-103.lan), connect to Mac Mini
   - fetch and pull changes using Github Desktop
   - stop server running in /mikedickson/DEV/redbeard-scraper/ (Ctrl-C)
   - `$ npm run build`
