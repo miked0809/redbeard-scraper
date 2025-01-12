@@ -60,9 +60,13 @@ async function performSearch(page, ownername) {
   const ownernameArray = ownername.split(" ", 2);
   const lastname = ownernameArray[0];
   const firstname = ownernameArray[1];
-  await page.type("#MainContent_txtLastName", lastname, { delay: 150 });
+  await page.type("#MainContent_txtLastName", lastname, {
+    delay: process.env.TYPE_DELAY || 0,
+  });
   if (firstname) {
-    await page.type("#MainContent_txtFirstName", firstname, { delay: 150 });
+    await page.type("#MainContent_txtFirstName", firstname, {
+      delay: process.env.TYPE_DELAY || 0,
+    });
   }
   await page.click("#MainContent_cmdSearch");
 }

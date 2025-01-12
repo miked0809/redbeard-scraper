@@ -55,7 +55,9 @@ const scraperObject = {
 };
 
 async function performSearch(page, ownername) {
-  await page.type("#searchValues_OwnerName", ownername, { delay: 150 });
+  await page.type("#searchValues_OwnerName", ownername, {
+    delay: process.env.TYPE_DELAY || 0,
+  });
   await page.click("button[value='OwnerSingleLine']");
 }
 

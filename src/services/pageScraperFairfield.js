@@ -67,7 +67,7 @@ async function agreeToTerms(page) {
 
 async function performSearch(page, ownername) {
   await page.type("#ctlBodyPane_ctl00_ctl01_txtName", ownername, {
-    delay: 150,
+    delay: process.env.TYPE_DELAY || 0,
   });
   await page.click("#ctlBodyPane_ctl00_ctl01_btnSearch");
 }

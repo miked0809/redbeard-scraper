@@ -17,7 +17,13 @@ const scraperObject = {
         if (!ownername || ownername.length === 0) {
           return scrapedPageData;
         }
-        await page.waitForSelector("table#searchResults, table#Owner");
+
+        await page.waitForSelector(
+          "table#searchResults, table#Owner, large ::-p-text('Your search did not find any records')",
+          {
+            timeout: 5000,
+          }
+        );
 
         const pageTitle = await page.title();
         const isSingleResult = pageTitle === "Franklin County Auditor";
@@ -49,7 +55,9 @@ const scraperObject = {
 
 async function performSearch(page, ownername) {
   await page.select("#selPageSize", "50");
-  await page.type("#inpOwner", ownername, { delay: 150 });
+  await page.type("#inpOwner", ownername, {
+    delay: process.env.TYPE_DELAY || 0,
+  });
   await page.click("button#btSearch");
 }
 

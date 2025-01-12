@@ -69,7 +69,7 @@ const scraperObject = {
 };
 
 async function performSearch(page, ownername) {
-  await page.type("#owner", ownername, { delay: 150 });
+  await page.type("#owner", ownername, { delay: process.env.TYPE_DELAY || 0 });
   await page.click("button[name='btnSearch']");
 }
 
